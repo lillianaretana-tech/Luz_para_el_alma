@@ -76,6 +76,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--accent)}
       <label for="fTexto">Texto (la cita, la idea o la práctica)</label><textarea id="fTexto"></textarea>
       <div class="row">
         <div style="flex:3"><label for="fFuente">Fuente (obra, capítulo/verso, autor, año)</label><input id="fFuente"></div>
+        <div style="flex:3"><label for="fEnlace">Enlace gratuito (opcional, https://…)</label><input id="fEnlace" placeholder="https://"></div>
         <div><label for="fFid">¿Es textual?</label>
           <select id="fFid"><option value="adaptación">Adaptación (paráfrasis)</option><option value="textual">Textual</option></select></div>
       </div>
@@ -200,6 +201,7 @@ function fillForm(r){
   document.querySelectorAll('#fOthers input').forEach(c=>{ c.checked = !!(r && r.cats.slice(1).includes(c.value)); });
   $('#fTexto').value = r?r.texto:'';
   $('#fFuente').value = r?r.fuente:'';
+  $('#fEnlace').value = r?(r.enlace||''):'';
   $('#fFid').value = r?r.fid:'adaptación';
   $('#fRefl').value = r?r.reflexion:'';
   $('#fPrac').value = r&&r.practica?r.practica:'';
@@ -214,7 +216,7 @@ async function save(){
   const others = [...document.querySelectorAll('#fOthers input:checked')].map(c=>c.value).filter(v=>v!==main);
   const body = {
     titulo:$('#fTitulo').value.trim(), tipo:$('#fTipo').value, trad:$('#fTrad').value.trim(),
-    cats:[main,...others], texto:$('#fTexto').value.trim(), fuente:$('#fFuente').value.trim(),
+    cats:[main,...others], texto:$('#fTexto').value.trim(), fuente:$('#fFuente').value.trim(), enlace:($('#fEnlace').value.trim()||null),
     fid:$('#fFid').value, reflexion:$('#fRefl').value.trim(), practica:$('#fPrac').value.trim()||null,
     orden:parseInt($('#fOrden').value,10)||0, publicada:$('#fPub').checked
   };

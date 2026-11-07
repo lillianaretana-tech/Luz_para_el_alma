@@ -1,4 +1,4 @@
-const CACHE = 'luz-interior-v5';
+const CACHE = 'luz-interior-v6';
 const FILES = ['./', 'index.html', 'manifest.json', 'icon.svg', 'icon-192.png', 'icon-512.png'];
 
 self.addEventListener('install', e => {
