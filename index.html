@@ -45,6 +45,8 @@ h3.t{font-family:'Lora',Georgia,serif;font-size:1.4rem;margin:2px 0 12px;line-he
 .quote{font-family:'Lora',Georgia,serif;font-size:1.12rem;border-left:3px solid var(--gold);padding-left:14px;margin:0 0 12px}
 .quote.q{font-style:italic}
 .source{font-size:.86rem;color:var(--muted);margin:6px 0 14px}
+.lnk{font-size:.74rem;color:var(--accent);margin-left:8px;white-space:nowrap;text-decoration:underline;text-underline-offset:2px}
+.lnk-n{font-size:.7rem;color:var(--muted)}
 .badge{display:inline-block;border:1px solid var(--line);border-radius:6px;padding:0 6px;font-size:.72rem;margin-left:6px;white-space:nowrap}
 .refl{margin:10px 0}
 .practice{background:var(--soft);border-radius:12px;padding:10px 14px;margin:12px 0}
@@ -130,7 +132,7 @@ const DATA_FALLBACK = [
   reflexion:'Los salmos nacieron como oraciones honestas de gente que sufría. No piden fingir alegría: ofrecen compañía en medio del dolor.',
   practica:'Escribe en una hoja lo que de verdad sientes, sin censura, como si se lo dijeras a alguien que te escucha con cariño.'},
  {id:2,cats:['tristeza'],tipo:'frase',trad:'Tradición judía y cristiana',titulo:'La noche no dura para siempre',
-  texto:'Por la noche durará el lloro, y a la mañana vendrá la alegría.',
+  texto:'Por la tarde durará el lloro, y a la mañana vendrá la alegría.',
   fuente:'Salmo 30:5, Reina-Valera (1909)',fid:'textual',
   reflexion:'No dice que no habrá noche, dice que la noche tiene fin. Sentir tristeza es parte del camino, no el destino final.'},
  {id:30,cats:['tristeza','soledad'],tipo:'idea',trad:'Budismo',titulo:'La semilla de mostaza',
@@ -167,7 +169,7 @@ const DATA_FALLBACK = [
   practica:'Pregúntate: ¿para quién o para qué vale la pena levantarme mañana? Aunque sea algo pequeño, escríbelo.'},
  {id:18,cats:['vacio','tristeza'],tipo:'practica',trad:'Psicología',titulo:'Activación paso a paso',
   texto:'Cuando faltan las ganas, esperar a sentirlas suele alargar el vacío. La psicología propone lo contrario: actuar primero, aunque sea poco, y dejar que el ánimo siga después.',
-  fuente:'Activación conductual (Aaron T. Beck y otros; terapia cognitivo-conductual)',fid:'adaptación',
+  fuente:'Activación conductual: Martell, Addis y Jacobson, Depression in Context (2001); Jacobson et al., 1996',fid:'adaptación',
   reflexion:'No es un sustituto del tratamiento, pero es una herramienta respaldada por la investigación.',
   practica:'Planea tres actividades pequeñas para hoy: una de cuidado (ducha, comida), una con otra persona, una que antes disfrutabas. Táchalas al terminar.'},
  {id:33,cats:['vacio','ansiedad'],tipo:'frase',trad:'Judaísmo',titulo:'No te toca terminarlo todo',
@@ -208,7 +210,7 @@ const DATA_FALLBACK = [
   reflexion:'No se trata de reprimir la rabia, sino de no dejar que sea ella quien decida lo que haces.'},
  {id:9,cats:['ira'],tipo:'frase',trad:'Estoicismo',titulo:'La demora, el mejor remedio',
   texto:'El mayor remedio de la ira es la dilación.',
-  fuente:'Séneca, Sobre la ira (De ira), libro II',fid:'adaptación',
+  fuente:'Séneca, Sobre la ira (De ira), II, 29',fid:'adaptación',
   reflexion:'Séneca propone esperar. La rabia es muy intensa al principio y se reduce con el tiempo.',
   practica:'Antes de responder o actuar con enojo, espera diez respiraciones lentas. Si puedes, camina un rato antes de decidir qué hacer.'},
  {id:10,cats:['ira'],tipo:'frase',trad:'Tradición judía y cristiana',titulo:'La respuesta suave',
@@ -258,7 +260,7 @@ const DATA_FALLBACK = [
   reflexion:'Gran parte de la ansiedad es un ensayo mental de desgracias que quizá nunca lleguen.',
   practica:'Pregúntate: ¿qué está pasando realmente en este momento? Nombra tres cosas que ves, dos que oyes y una que sientes en el cuerpo.'},
  {id:5,cats:['ansiedad'],tipo:'frase',trad:'Tradición cristiana',titulo:'Un día a la vez',
-  texto:'Así que no os afanéis por el día de mañana, pues el día de mañana traerá su afán. Basta a cada día su propio mal.',
+  texto:'Así que, no os congojéis por el día de mañana; que el día de mañana traerá su fatiga: basta al día su afán.',
   fuente:'Mateo 6:34, Reina-Valera (1909)',fid:'textual',
   reflexion:'Una invitación antigua a bajar el ritmo del pensamiento y ocuparse de lo que sí se puede hacer hoy.'},
  {id:37,cats:['ansiedad'],tipo:'frase',trad:'Islam',titulo:'El sosiego del corazón',
@@ -388,7 +390,8 @@ const DATA_FALLBACK = [
   {"cats": ["gratitud"], "tipo": "practica", "trad": "Judaísmo", "titulo": "Modé Aní: gracias al despertar", "texto": "Al abrir los ojos, antes de levantarte, agradece: «Gracias porque me devolviste mi alma, con compasión; grande es tu fidelidad.»", "fuente": "Modé Aní, oración matutina tradicional judía", "fid": "adaptación", "reflexion": "Empezar el día con una frase de gratitud, aun sin ganas, cambia el tono con que se afronta lo demás.", "practica": "Mañana, antes de tocar el teléfono, di tu propia frase de agradecimiento."}
 ];
 
-DATA_FALLBACK.forEach((d,i)=>{ d.id=i+1; });
+const ENLACES = {"1": "https://www.blueletterbible.org/rvr09/psa/34", "2": "https://www.blueletterbible.org/rvr09/psa/30", "3": "https://suttacentral.net/dhp100-115", "4": "https://quran.com/94/5-6", "8": "https://ctext.org/dao-de-jing/en", "11": "https://www.sefaria.org/Pirkei_Avot.2.16", "12": "https://www.holy-bhagavad-gita.org/chapter/2/verse/47", "13": "https://suttacentral.net/dhp1-20", "14": "https://classics.mit.edu/Antoninus/meditations.2.two.html", "15": "https://www.sefaria.org/Pirkei_Avot.4.1", "16": "https://ctext.org/dao-de-jing/en", "17": "https://pubmed.ncbi.nlm.nih.gov/?term=Open+hearts+build+lives+loving-kindness+meditation+Fredrickson", "18": "https://suttacentral.net/dhp221-234", "20": "https://www.blueletterbible.org/rvr09/pro/15", "21": "https://suttacentral.net/dhp167-178", "22": "https://suttacentral.net/mn86", "24": "https://ctext.org/analects/wei-ling-gong/en", "25": "https://sunnah.com/nawawi40:13", "27": "https://doi.org/10.1080/15298860309032", "28": "https://classics.mit.edu/Epictetus/epicench.html", "29": "https://en.wikisource.org/wiki/Moral_letters_to_Lucilius/Letter_13", "30": "https://www.blueletterbible.org/rvr09/mat/6", "31": "https://quran.com/13/28", "34": "https://classics.mit.edu/Epictetus/epicench.html", "35": "https://www.blueletterbible.org/rvr09/ecc/4", "37": "https://pubmed.ncbi.nlm.nih.gov/?term=Counting+blessings+versus+burdens+Emmons+McCullough", "39": "https://www.blueletterbible.org/rvr09/ecc/3", "40": "https://www.blueletterbible.org/rvr09/psa/23", "41": "https://classics.mit.edu/Epictetus/epicench.html", "42": "https://suttacentral.net/dhp273-289", "44": "https://quran.com/2/156", "46": "https://pubmed.ncbi.nlm.nih.gov/?term=Confronting+a+traumatic+event+toward+an+understanding+of+inhibition+and+disease", "47": "https://pubmed.ncbi.nlm.nih.gov/?term=The+dual+process+model+of+coping+with+bereavement+rationale+and+description", "48": "https://suttacentral.net/dhp1-20", "49": "https://www.blueletterbible.org/rvr09/luk/23", "50": "https://quran.com/42/40", "51": "https://quran.com/41/34", "52": "https://www.sefaria.org/Mishneh_Torah,_Repentance.2.10", "53": "https://ctext.org/dao-de-jing/en", "54": "https://classics.mit.edu/Antoninus/meditations.6.six.html", "59": "https://www.holy-bhagavad-gita.org/chapter/3/verse/35", "60": "https://www.sefaria.org/Pirkei_Avot.1.14", "61": "https://classics.mit.edu/Aristotle/nicomachaen.1.i.html", "65": "https://ctext.org/analects/wei-zheng/en", "66": "https://www.blueletterbible.org/rvr09/lam/3", "67": "https://www.blueletterbible.org/rvr09/isa/40", "68": "https://quran.com/39/53", "69": "https://www.holy-bhagavad-gita.org/chapter/2/verse/14", "72": "https://pubmed.ncbi.nlm.nih.gov/?term=Loss%2C+trauma%2C+and+human+resilience+Bonanno", "73": "https://pubmed.ncbi.nlm.nih.gov/?term=The+health+benefits+of+writing+about+life+goals+King", "74": "https://www.blueletterbible.org/rvr09/psa/42", "75": "https://www.blueletterbible.org/rvr09/psa/46", "76": "https://ctext.org/dao-de-jing/en", "77": "https://classics.mit.edu/Antoninus/meditations.4.four.html", "81": "https://www.blueletterbible.org/rvr09/joh/14", "82": "https://www.sefaria.org/Pirkei_Avot.1.12", "83": "https://www.holy-bhagavad-gita.org/chapter/2/verse/48", "84": "https://en.wikisource.org/wiki/Moral_letters_to_Lucilius/Letter_107", "85": "https://suttacentral.net/dhp157-166", "86": "https://suttacentral.net/sn3.8", "87": "https://www.blueletterbible.org/rvr09/lev/19", "88": "https://classics.mit.edu/Aristotle/nicomachaen.9.ix.html", "91": "https://ctext.org/analects/xian-wen/en", "92": "https://suttacentral.net/dhp157-166", "93": "https://ctext.org/dao-de-jing/en", "94": "https://doi.org/10.1073/pnas.1510459112", "95": "https://www.blueletterbible.org/rvr09/psa/126", "96": "https://en.wikisource.org/wiki/Moral_letters_to_Lucilius/Letter_1", "97": "https://doi.org/10.1037/1089-2680.9.2.111", "98": "https://ctext.org/dao-de-jing/en", "99": "https://suttacentral.net/dhp1-20", "100": "https://www.blueletterbible.org/rvr09/pro/14", "101": "https://pubmed.ncbi.nlm.nih.gov/?term=Responses+to+depression+and+their+effects+on+the+duration+of+depressive+episodes", "103": "https://www.blueletterbible.org/rvr09/ecc/7", "104": "https://www.blueletterbible.org/rvr09/pro/16", "105": "https://classics.mit.edu/Aristotle/nicomachaen.2.ii.html", "107": "https://sunnah.com/bukhari:6114", "108": "https://www.blueletterbible.org/rvr09/psa/51", "109": "https://www.sefaria.org/Mishneh_Torah,_Repentance.2.2", "112": "https://classics.mit.edu/Antoninus/meditations.12.twelve.html", "113": "https://classics.mit.edu/Antoninus/meditations.8.eight.html", "114": "https://pubmed.ncbi.nlm.nih.gov/?term=Stimulus+control+applications+to+the+treatment+of+worry", "116": "https://pubmed.ncbi.nlm.nih.gov/?term=Maximizing+exposure+therapy+an+inhibitory+learning+approach", "118": "https://doi.org/10.1371/journal.pmed.1000316", "119": "https://ctext.org/analects/yan-yuan/en", "120": "https://classics.mit.edu/Aristotle/politics.1.one.html", "122": "https://quran.com/14/7", "123": "https://pubmed.ncbi.nlm.nih.gov/?term=Positive+psychology+progress+empirical+validation+of+interventions"};
+DATA_FALLBACK.forEach((d,i)=>{ d.id=i+1; d.enlace=ENLACES[d.id]||null; });
 
 /* ---------- Conexión con Supabase (lectura pública) ---------- */
 const SB_URL = 'https://vgkyoyosjewdygxtnqvu.supabase.co';
@@ -475,7 +478,7 @@ function renderPage(i){
      <div class="tag">${typeLabel(d.tipo)} · ${esc(d.trad)}</div>
      <h3 class="t">${esc(d.titulo)}</h3>
      <div class="quote ${d.tipo==='frase'?'q':''}">${esc(d.texto)}</div>
-     <div class="source">${esc(d.fuente)}<span class="badge">${d.fid}</span></div>
+     <div class="source">${esc(d.fuente)}<span class="badge">${d.fid}</span>${linkHTML(d)}</div>
      <p class="refl">${esc(d.reflexion)}</p>
      ${d.practica?`<div class="practice"><strong>Para practicar:</strong> ${esc(d.practica)}</div>
        <div class="ejer"><label>✎ Mi cuaderno (se guarda solo en este dispositivo)</label><textarea aria-label="Mi cuaderno" data-ej="${d.id}" placeholder="Escribe aquí tu ejercicio…">${esc(ejercicios[d.id]||'')}</textarea><div class="st"><span class="ejst">${ejercicios[d.id]?'Guardado ✓':''}</span><button class="mini" data-ej2d="${d.id}">Pasar al diario</button></div></div>`:''}
@@ -525,6 +528,11 @@ function updateBar(){
   $('#next').disabled = cur===pages.length-1;
   $('#ind').textContent = cur===0 ? '' : (cur+1)+' / '+pages.length;
   $('#goToc').style.visibility = cur===0 ? 'hidden' : 'visible';
+}
+function linkHTML(d){
+  if(!d.enlace || !/^https:\/\//.test(d.enlace)) return '';
+  const u=d.enlace, est=/pubmed|doi\.org/.test(u), en=/mit\.edu|sefaria|ctext|wikisource|suttacentral|sunnah|gutenberg/.test(u);
+  return ` <a class="lnk" href="${esc(u)}" target="_blank" rel="noopener noreferrer">${est?'Ver el estudio':'Leer gratis'} ↗</a>${en?'<span class="lnk-n"> (en inglés)</span>':''}`;
 }
 const TTS = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
 let sayBtn=null;
@@ -633,7 +641,7 @@ stage.addEventListener('mouseup', e=>{ if(!mdown) return; mdown=false; const dx=
 async function loadRemote(){
   try{
     const ctl = new AbortController(); const to = setTimeout(()=>ctl.abort(), 7000);
-    const r = await fetch(SB_URL+'/rest/v1/luz_lecturas?select=id,cats,tipo,trad,titulo,texto,fuente,fid,reflexion,practica&publicada=eq.true&order=orden.asc,id.asc',
+    const r = await fetch(SB_URL+'/rest/v1/luz_lecturas?select=id,cats,tipo,trad,titulo,texto,fuente,enlace,fid,reflexion,practica&publicada=eq.true&order=orden.asc,id.asc',
       {headers:{apikey:SB_KEY}, signal:ctl.signal});
     clearTimeout(to);
     if(!r.ok) return;
