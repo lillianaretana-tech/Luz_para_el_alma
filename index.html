@@ -45,6 +45,11 @@ h3.t{font-family:'Lora',Georgia,serif;font-size:1.4rem;margin:2px 0 12px;line-he
 .badge{display:inline-block;border:1px solid var(--line);border-radius:6px;padding:0 6px;font-size:.72rem;margin-left:6px;white-space:nowrap}
 .refl{margin:10px 0}
 .practice{background:var(--soft);border-radius:12px;padding:10px 14px;margin:12px 0}
+.ejer{margin:8px 0 4px}
+.ejer label{display:block;font-size:.85rem;color:var(--muted);margin-bottom:4px}
+.ejer textarea{width:100%;min-height:96px;resize:vertical;border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:10px;padding:10px;font:inherit;font-size:.95rem;line-height:1.5}
+.ejer textarea:focus{outline:2px solid var(--gold);outline-offset:1px}
+.ejer .st{display:flex;justify-content:space-between;align-items:center;font-size:.78rem;color:var(--muted);margin-top:4px;gap:8px}
 .also{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0;align-items:center;font-size:.85rem;color:var(--muted)}
 .mini{border:1px solid var(--line);background:var(--paper2);color:var(--ink);border-radius:999px;padding:3px 10px;font:inherit;font-size:.8rem;cursor:pointer}
 .actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
@@ -404,6 +409,7 @@ function load(k,def){ try{ const v=localStorage.getItem(k); return v?JSON.parse(
 function save(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
 let favs = new Set(load('luz-favs',[]));
 let diario = load('luz-diario',[]);
+let ejercicios = load('luz-ejercicios',{});
 const FEELS = ['Triste','Sin ganas','Con rabia','Ansioso/a','Solo/a','En paz','Agradecido/a'];
 
 /* ---------- Páginas del libro ---------- */
@@ -468,7 +474,8 @@ function renderPage(i){
      <div class="quote ${d.tipo==='frase'?'q':''}">${esc(d.texto)}</div>
      <div class="source">${esc(d.fuente)}<span class="badge">${d.fid}</span></div>
      <p class="refl">${esc(d.reflexion)}</p>
-     ${d.practica?`<div class="practice"><strong>Para practicar:</strong> ${esc(d.practica)}</div>`:''}
+     ${d.practica?`<div class="practice"><strong>Para practicar:</strong> ${esc(d.practica)}</div>
+       <div class="ejer"><label>✎ Mi cuaderno (se guarda solo en este dispositivo)</label><textarea aria-label="Mi cuaderno" data-ej="${d.id}" placeholder="Escribe aquí tu ejercicio…">${esc(ejercicios[d.id]||'')}</textarea><div class="st"><span class="ejst">${ejercicios[d.id]?'Guardado ✓':''}</span><button class="mini" data-ej2d="${d.id}">Pasar al diario</button></div></div>`:''}
      ${others.length?`<div class="also">También para:${others.map(c=>`<button class="mini" data-goto="${idxSec(c)}">${esc(MOOD_LABEL[c])}</button>`).join('')}</div>`:''}
      <div class="actions">
        <button class="btn ${favs.has(d.id)?'on':''}" data-fav="${d.id}">${favs.has(d.id)?'♥ Guardado':'♡ Guardar'}</button>
@@ -559,6 +566,12 @@ document.addEventListener('click', e=>{
     try{ navigator.clipboard.writeText(txt).then(()=>{c.textContent='¡Copiado!';setTimeout(()=>c.textContent='Copiar',1400)}).catch(()=>{}); }catch(err){}
     return;
   }
+  const e2=e.target.closest('[data-ej2d]');
+  if(e2){ const id=e2.dataset.ej2d, ta=e2.closest('.ejer').querySelector('textarea'), t=ta&&ta.value.trim(); const st=ta&&ta.parentNode.querySelector('.ejst');
+    if(!t){ if(st) st.textContent='Escribe algo primero'; return; }
+    const d=DATA.find(x=>x.id===+id); const now=new Date();
+    diario.push({id:Date.now(),fecha:now.toLocaleDateString('es',{day:'numeric',month:'short',year:'numeric'}),feel:'Ejercicio',texto:(d?'['+d.titulo+'] ':'')+t});
+    save('luz-diario',diario); if(st) st.textContent='Copiado a tu diario ✓'; return; }
   if(e.target.closest('[data-dsave]')){
     const t = $('#dText').value.trim(); if(!t) return;
     const feel = $('#dFeel').value;
@@ -575,6 +588,12 @@ document.addEventListener('click', e=>{
 $('#prev').onclick = ()=>go(cur-1);
 $('#next').onclick = ()=>go(cur+1);
 $('#goToc').onclick = ()=>go(1);
+let ejT=null;
+document.addEventListener('input',e=>{
+  const t=e.target.closest&&e.target.closest('[data-ej]'); if(!t) return;
+  const st=t.parentNode.querySelector('.ejst'); if(st) st.textContent='Escribiendo…';
+  clearTimeout(ejT); ejT=setTimeout(()=>{ const v=t.value; if(v.trim()) ejercicios[t.dataset.ej]=v; else delete ejercicios[t.dataset.ej]; save('luz-ejercicios',ejercicios); if(st) st.textContent=v.trim()?'Guardado ✓':''; },400);
+});
 document.addEventListener('keydown', e=>{
   if(/INPUT|TEXTAREA|SELECT/.test((e.target.tagName||''))) return;
   if(e.key==='ArrowRight') go(cur+1);
