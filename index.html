@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#f8f3ea">
 <title>Luz Interior – Un librito para el alma</title>
 <link rel="manifest" href="manifest.json">
@@ -17,7 +18,8 @@
   --desk:#f8f3ea; --paper:#fffefa; --paper2:#fbf4e4; --ink:#33302b; --muted:#6f6556; --line:#eadfc8;
   --accent:#b25c1e; --soft:#fdecd2; --gold:#c98a2b; --cov1:#fff6e0; --cov2:#f7d9a6; --covink:#8a4a1c;
 }
-:root[data-theme=dark]{--desk:#14110e; --paper:#2a2520; --paper2:#322c25; --ink:#f0e8da; --muted:#b0a591; --line:#463e33; --accent:#e2a362; --soft:#3d3123; --gold:#d6a85a; --cov1:#7a5038; --cov2:#3b2418; --covink:#e0b565;}
+:root{color-scheme:light}
+:root[data-theme=dark]{color-scheme:dark;--desk:#14110e; --paper:#2a2520; --paper2:#322c25; --ink:#f0e8da; --muted:#b0a591; --line:#463e33; --accent:#e2a362; --soft:#3d3123; --gold:#d6a85a; --cov1:#7a5038; --cov2:#3b2418; --covink:#e0b565;}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;margin:0}
 body{background:var(--desk);color:var(--ink);font-family:'Nunito',system-ui,sans-serif;line-height:1.6;display:flex;flex-direction:column;align-items:center;overflow:hidden}
