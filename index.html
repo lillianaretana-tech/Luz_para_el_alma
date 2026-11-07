@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#5b3a29">
+<title>Luz Interior – Un librito para el alma</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --desk:#e9dfcf; --paper:#fffaf0; --paper2:#f6ecd9; --ink:#2e2a25; --muted:#75695a; --line:#e3d6bd;
+  --accent:#a8541a; --soft:#f6e3c8; --leather:#5b3a29; --gold:#e0b565;
+}
+@media (prefers-color-scheme:dark){
+  :root{--desk:#14110e; --paper:#2a2520; --paper2:#322c25; --ink:#f0e8da; --muted:#b0a591; --line:#463e33; --accent:#e2a362; --soft:#3d3123; --leather:#3b2418; --gold:#d6a85a;}
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0}
+body{background:var(--desk);color:var(--ink);font-family:'Nunito',system-ui,sans-serif;line-height:1.6;display:flex;flex-direction:column;align-items:center;overflow:hidden}
+.shell{width:100%;max-width:560px;padding:12px 12px 8px;display:flex;flex-direction:column;height:100vh;height:100dvh}
+.stage{flex:1;min-height:0;perspective:1800px;position:relative}
+.book{position:absolute;inset:0;border-radius:6px 14px 14px 6px;box-shadow:0 14px 34px rgba(0,0,0,.28),0 2px 0 var(--line);background:var(--paper)}
+.book::before{content:"";position:absolute;left:0;top:0;bottom:0;width:14px;z-index:5;pointer-events:none;border-radius:6px 0 0 6px;background:linear-gradient(90deg,rgba(0,0,0,.20),rgba(0,0,0,0))}
+.pg{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;transform-origin:left center;backface-visibility:hidden;border-radius:6px 14px 14px 6px;background:var(--paper);-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.pg.top{z-index:2}
+.inner{padding:26px 24px 40px 30px;min-height:100%}
+.inner.cover{background:radial-gradient(circle at 30% 20%,#7a5038,var(--leather) 70%);color:var(--gold);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;cursor:pointer}
+.cover .frame{border:2px solid var(--gold);outline:1px solid var(--gold);outline-offset:6px;border-radius:6px;padding:46px 22px;width:100%;max-width:340px}
+.cover h1{font-family:'Lora',Georgia,serif;font-weight:600;font-size:2.4rem;margin:12px 0 6px;letter-spacing:.02em}
+.cover .orn{font-size:2.4rem}
+.cover p{margin:6px 0;opacity:.9}
+.cover .open{margin-top:26px;font-size:.9rem;letter-spacing:.08em;text-transform:uppercase;animation:pulse 2.2s infinite}
+@keyframes pulse{50%{opacity:.4}}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-top:10px}
+.bar button{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:999px;font:inherit;font-weight:700;padding:9px 16px;cursor:pointer;min-width:48px}
+.bar button:disabled{opacity:.35}
+#ind{color:var(--muted);font-size:.88rem}
+h2.t{font-family:'Lora',Georgia,serif;font-size:1.5rem;margin:0 0 6px}
+h3.t{font-family:'Lora',Georgia,serif;font-size:1.4rem;margin:2px 0 12px;line-height:1.3}
+.tag{font-size:.74rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--accent)}
+.quote{font-family:'Lora',Georgia,serif;font-size:1.12rem;border-left:3px solid var(--gold);padding-left:14px;margin:0 0 12px}
+.quote.q{font-style:italic}
+.source{font-size:.86rem;color:var(--muted);margin:6px 0 14px}
+.badge{display:inline-block;border:1px solid var(--line);border-radius:6px;padding:0 6px;font-size:.72rem;margin-left:6px;white-space:nowrap}
+.refl{margin:10px 0}
+.practice{background:var(--soft);border-radius:12px;padding:10px 14px;margin:12px 0}
+.also{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0;align-items:center;font-size:.85rem;color:var(--muted)}
+.mini{border:1px solid var(--line);background:var(--paper2);color:var(--ink);border-radius:999px;padding:3px 10px;font:inherit;font-size:.8rem;cursor:pointer}
+.actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:10px;padding:7px 14px;font:inherit;font-size:.9rem;cursor:pointer}
+.btn.on{color:var(--accent);border-color:var(--accent);font-weight:700}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700}
+.search{width:100%;padding:11px 14px;border-radius:12px;border:1px solid var(--line);background:var(--paper2);color:var(--ink);font:inherit}
+.search:focus,textarea:focus,select:focus{outline:2px solid var(--accent)}
+.daily{background:var(--soft);border-radius:14px;padding:12px 14px;margin:12px 0}
+.daily blockquote{font-family:'Lora',Georgia,serif;font-style:italic;margin:4px 0}
+.list{list-style:none;padding:0;margin:8px 0}
+.list li{margin:0}
+.list button{width:100%;text-align:left;border:0;border-bottom:1px solid var(--line);background:transparent;color:var(--ink);font:inherit;padding:11px 2px;cursor:pointer;display:flex;justify-content:space-between;gap:10px}
+.list small{color:var(--muted);white-space:nowrap}
+.sec{display:flex;flex-direction:column;justify-content:center;min-height:calc(100% - 20px);text-align:center}
+.sec .big{font-family:'Lora',Georgia,serif;font-size:2rem;margin:10px 0}
+.sec .orn{color:var(--gold);font-size:1.8rem}
+textarea,select{width:100%;border:1px solid var(--line);border-radius:12px;background:var(--paper2);color:var(--ink);font:inherit;padding:10px}
+textarea{min-height:110px;resize:vertical}
+.entry{border-top:1px solid var(--line);padding:10px 0}
+.entry small{color:var(--muted)}
+.note{border:1px dashed var(--accent);border-radius:12px;padding:12px;font-size:.9rem;margin:14px 0}
+.muted{color:var(--muted);font-size:.88rem}
+.empty{color:var(--muted);text-align:center;padding:18px 0}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="stage">
+    <div class="book" id="book">
+      <div class="pg under" id="pgUnder"></div>
+      <div class="pg top" id="pgTop"></div>
+    </div>
+  </div>
+  <nav class="bar" aria-label="Navegación del libro">
+    <button id="prev" aria-label="Página anterior">‹</button>
+    <button id="goToc">☰ Índice</button>
+    <span id="ind"></span>
+    <button id="next" aria-label="Página siguiente">›</button>
+  </nav>
+</div>
+
+<script>
+/* ---------- Capítulos (estados de ánimo) ---------- */
+const MOODS = [
+  {id:'tristeza', label:'Cuando estoy triste', intro:'La tristeza también es una maestra. Aquí, voces de muchas culturas que acompañan sin apurarte.'},
+  {id:'vacio', label:'Cuando no tengo ganas', intro:'Cuando todo pesa, lo pequeño cuenta. Ideas y prácticas para dar un primer paso.'},
+  {id:'amargura', label:'Cuando me siento amargado/a', intro:'El resentimiento cansa a quien lo carga. Lecturas para ablandar el corazón.'},
+  {id:'ira', label:'Cuando tengo rabia', intro:'La rabia es energía. Se trata de no dejar que maneje por ti.'},
+  {id:'culpa', label:'Quiero ser mejor persona', intro:'Cambiar siempre es posible. Reconocer el error es el comienzo, no el final.'},
+  {id:'ansiedad', label:'Cuando estoy ansioso/a', intro:'Volver al presente, al cuerpo, a lo que sí depende de ti.'},
+  {id:'soledad', label:'Cuando me siento solo/a', intro:'Somos seres de vínculo. Pequeños gestos que tienden puentes.'},
+  {id:'gratitud', label:'Para agradecer', intro:'Mirar lo que sí hay. Un hábito sencillo que cambia la mirada.'}
+];
+const MOOD_LABEL = Object.fromEntries(MOODS.map(m=>[m.id,m.label]));
+
+/* fid: 'textual' = texto de una traducción de dominio público; 'adaptación' = paráfrasis del sentido */
+const DATA_FALLBACK = [
+ {id:1,cats:['tristeza','soledad'],tipo:'frase',trad:'Tradición judía y cristiana',titulo:'Cerca de los quebrantados',
+  texto:'Cercano está Jehová a los quebrantados de corazón; y salva a los contritos de espíritu.',
+  fuente:'Salmo 34:18, Reina-Valera (1909)',fid:'textual',
+  reflexion:'Los salmos nacieron como oraciones honestas de gente que sufría. No piden fingir alegría: ofrecen compañía en medio del dolor.',
+  practica:'Escribe en una hoja lo que de verdad sientes, sin censura, como si se lo dijeras a alguien que te escucha con cariño.'},
+ {id:2,cats:['tristeza'],tipo:'frase',trad:'Tradición judía y cristiana',titulo:'La noche no dura para siempre',
+  texto:'Por la noche durará el lloro, y a la mañana vendrá la alegría.',
+  fuente:'Salmo 30:5, Reina-Valera (1909)',fid:'textual',
+  reflexion:'No dice que no habrá noche, dice que la noche tiene fin. Sentir tristeza es parte del camino, no el destino final.'},
+ {id:30,cats:['tristeza','soledad'],tipo:'idea',trad:'Budismo',titulo:'La semilla de mostaza',
+  texto:'Kisa Gotami, desesperada por la muerte de su hijo, pidió a Buda una medicina. Él le dijo que trajera una semilla de mostaza de una casa donde nadie hubiera perdido a un ser querido. Recorrió el pueblo y no la encontró. Entendió que no estaba sola en su dolor.',
+  fuente:'Relato tradicional, comentario al Dhammapada (verso 114)',fid:'adaptación',
+  reflexion:'El duelo es uno de los dolores más universales. Saber que otros han pasado por esto no lo quita, pero lo hace más compartido y llevadero.'},
+ {id:31,cats:['tristeza','ansiedad'],tipo:'frase',trad:'Islam',titulo:'Con la dificultad viene la facilidad',
+  texto:'En verdad, con la dificultad viene la facilidad. En verdad, con la dificultad viene la facilidad.',
+  fuente:'Corán, sura 94 (Ash-Sharh), versículos 5-6',fid:'adaptación',
+  reflexion:'El texto lo repite dos veces, como para que no quede duda: la dificultad no tiene la última palabra.'},
+ {id:32,cats:['tristeza','vacio'],tipo:'frase',trad:'Hinduismo',titulo:'De la oscuridad a la luz',
+  texto:'Condúceme de lo irreal a lo real, de la oscuridad a la luz, de la muerte a la inmortalidad.',
+  fuente:'Brihadaranyaka Upanishad, 1.3.28',fid:'adaptación',
+  reflexion:'Una plegaria muy antigua del hinduismo, que se repite todavía hoy. Habla del deseo humano de ir hacia la luz.'},
+ {id:19,cats:['tristeza','vacio','ansiedad'],tipo:'practica',trad:'Sufismo',titulo:'Recibir las emociones como huéspedes',
+  texto:'Tratar cada emoción como un visitante: darle la bienvenida, escucharla y dejar que se vaya a su tiempo, sin pelear con ella.',
+  fuente:'Inspirada en el poema "La casa de huéspedes" de Rumi (Masnavi, s. XIII), versión libre',fid:'adaptación',
+  reflexion:'Aceptar lo que sentimos no es resignarse; es dejar de gastar energía en negarlo.',
+  practica:'Respira lento y di en voz baja: "Hay tristeza aquí. Te veo." Quédate un minuto con ella sin intentar arreglarla.'},
+ {id:26,cats:['tristeza'],tipo:'idea',trad:'Literatura espiritual',titulo:'El dolor rompe la cáscara',
+  texto:'Vuestro dolor es la rotura de la cáscara que encierra vuestro entendimiento.',
+  fuente:'Khalil Gibran, El profeta, "Del dolor" (1923)',fid:'adaptación',
+  reflexion:'Gibran sugiere que el sufrimiento, aunque duele, puede abrir una comprensión más profunda de la vida.'},
+
+ {id:16,cats:['vacio','tristeza'],tipo:'frase',trad:'Taoísmo',titulo:'El primer paso',
+  texto:'Un viaje de mil millas comienza con un solo paso.',
+  fuente:'Lao Tse, Tao Te Ching, cap. 64',fid:'adaptación',
+  reflexion:'Cuando todo pesa, lo que cuenta no es el gran cambio, sino un paso pequeño que sí se pueda dar hoy.',
+  practica:'Elige una sola acción diminuta (abrir la ventana, beber agua, caminar cinco minutos, llamar a alguien) y hazla ahora.'},
+ {id:17,cats:['vacio'],tipo:'idea',trad:'Psicología y filosofía',titulo:'La última libertad',
+  texto:'Al ser humano se le puede quitar casi todo, menos una cosa: la libertad de elegir su actitud ante lo que le toca vivir.',
+  fuente:'Viktor Frankl, El hombre en busca de sentido (idea central del libro)',fid:'adaptación',
+  reflexion:'Frankl, psiquiatra que sobrevivió a los campos de concentración, concluyó que encontrar un sentido, aun en el sufrimiento, es lo que nos sostiene.',
+  practica:'Pregúntate: ¿para quién o para qué vale la pena levantarme mañana? Aunque sea algo pequeño, escríbelo.'},
+ {id:18,cats:['vacio','tristeza'],tipo:'practica',trad:'Psicología',titulo:'Activación paso a paso',
+  texto:'Cuando faltan las ganas, esperar a sentirlas suele alargar el vacío. La psicología propone lo contrario: actuar primero, aunque sea poco, y dejar que el ánimo siga después.',
+  fuente:'Activación conductual (Aaron T. Beck y otros; terapia cognitivo-conductual)',fid:'adaptación',
+  reflexion:'No es un sustituto del tratamiento, pero es una herramienta respaldada por la investigación.',
+  practica:'Planea tres actividades pequeñas para hoy: una de cuidado (ducha, comida), una con otra persona, una que antes disfrutabas. Táchalas al terminar.'},
+ {id:33,cats:['vacio','ansiedad'],tipo:'frase',trad:'Judaísmo',titulo:'No te toca terminarlo todo',
+  texto:'No te corresponde a ti terminar la tarea, pero tampoco eres libre de desentenderte de ella.',
+  fuente:'Pirké Avot (Ética de los Padres), 2:16, Rabí Tarfón',fid:'adaptación',
+  reflexion:'Alivia la presión de tener que resolverlo todo, sin dejar de hacer tu parte.'},
+ {id:27,cats:['vacio','gratitud'],tipo:'frase',trad:'Hinduismo',titulo:'Derecho a la acción, no al fruto',
+  texto:'Tu derecho es a la acción, no a sus frutos. No te muevas por el fruto ni te aferres a la inacción.',
+  fuente:'Bhagavad Gita, 2:47',fid:'adaptación',
+  reflexion:'Hacer lo correcto con lo que tenemos a mano, sin esperar aplausos ni resultados, libera de mucha ansiedad.'},
+
+ {id:7,cats:['amargura','ira','culpa'],tipo:'frase',trad:'Budismo',titulo:'El odio no se vence con odio',
+  texto:'El odio nunca se apaga con odio; solo se apaga con amor. Esta es una ley eterna.',
+  fuente:'Dhammapada, verso 5 (Buda)',fid:'adaptación',
+  reflexion:'Una de las enseñanzas más reconocidas del budismo: cada respuesta rencorosa alimenta el fuego que decimos querer apagar.'},
+ {id:11,cats:['amargura','ira','culpa'],tipo:'idea',trad:'Estoicismo',titulo:'Cada quien actúa desde su ignorancia',
+  texto:'Al amanecer, dite a ti mismo: hoy me encontraré con gente entrometida, ingrata, arrogante, falsa, envidiosa, antisocial. Todo eso les viene de ignorar lo que es bueno y lo que es malo.',
+  fuente:'Marco Aurelio, Meditaciones, II, 1',fid:'adaptación',
+  reflexion:'Marco Aurelio, emperador romano, escribía para sí mismo. No justifica el daño, pero ayuda a no tomarlo todo de forma tan personal ni a vivir en resentimiento.'},
+ {id:34,cats:['amargura','culpa'],tipo:'frase',trad:'Judaísmo',titulo:'¿Quién es sabio? ¿Quién es rico?',
+  texto:'¿Quién es sabio? El que aprende de todos. ¿Quién es fuerte? El que domina su impulso. ¿Quién es rico? El que se alegra con lo que tiene. ¿Quién es digno de honor? El que honra a los demás.',
+  fuente:'Pirké Avot (Ética de los Padres), 4:1',fid:'adaptación',
+  reflexion:'Cuatro preguntas que dan vuelta a lo que solemos valorar. La amargura suele nacer de comparar; esta mirada propone otra medida.'},
+ {id:28,cats:['amargura','culpa','ira'],tipo:'frase',trad:'Taoísmo',titulo:'Conocerse es lo más difícil',
+  texto:'Conocer a los demás es sabiduría; conocerse a uno mismo es iluminación. Vencer a otros es fuerza; vencerse a uno mismo es verdadero poder.',
+  fuente:'Lao Tse, Tao Te Ching, cap. 33',fid:'adaptación',
+  reflexion:'El cambio personal empieza mirándose con honestidad, sin excusas y sin autodesprecio.',
+  practica:'Escribe una sola cosa de ti que quisieras mejorar, sin juzgarte, y una acción mínima que podrías hacer esta semana.'},
+ {id:21,cats:['soledad','amargura','culpa'],tipo:'practica',trad:'Budismo y ciencia contemplativa',titulo:'Meditación de bondad amorosa (Metta)',
+  texto:'Repite en silencio, primero para ti y luego para alguien querido, alguien neutro y, si puedes, alguien difícil: "Que seas feliz. Que estés en paz. Que estés libre de sufrimiento."',
+  fuente:'Tradición budista, Metta Sutta (Sutta Nipata 1.8); estudios modernos, p. ej. Fredrickson et al., 2008',fid:'adaptación',
+  reflexion:'Es una práctica milenaria para ablandar el corazón y soltar el rencor, también hacia uno mismo.',
+  practica:'Dedícale cinco minutos al día durante una semana, y observa cómo cambia tu trato hacia ti y hacia los demás.'},
+
+ {id:8,cats:['ira','amargura'],tipo:'frase',trad:'Budismo',titulo:'Vence la ira con calma',
+  texto:'Vence la ira con la no ira; vence el mal con el bien; vence al avaro con la generosidad y al mentiroso con la verdad.',
+  fuente:'Dhammapada, verso 223 (Buda)',fid:'adaptación',
+  reflexion:'No se trata de reprimir la rabia, sino de no dejar que sea ella quien decida lo que haces.'},
+ {id:9,cats:['ira'],tipo:'frase',trad:'Estoicismo',titulo:'La demora, el mejor remedio',
+  texto:'El mayor remedio de la ira es la dilación.',
+  fuente:'Séneca, Sobre la ira (De ira), libro II',fid:'adaptación',
+  reflexion:'Séneca propone esperar. La rabia es muy intensa al principio y se reduce con el tiempo.',
+  practica:'Antes de responder o actuar con enojo, espera diez respiraciones lentas. Si puedes, camina un rato antes de decidir qué hacer.'},
+ {id:10,cats:['ira'],tipo:'frase',trad:'Tradición judía y cristiana',titulo:'La respuesta suave',
+  texto:'La blanda respuesta quita la ira; mas la palabra áspera hace subir el furor.',
+  fuente:'Proverbios 15:1, Reina-Valera (1909)',fid:'textual',
+  reflexion:'Una frase breve de sabiduría práctica: la manera en que respondemos puede apagar o encender el conflicto.'},
+
+ {id:12,cats:['culpa'],tipo:'frase',trad:'Budismo',titulo:'Una luz que sale de las nubes',
+  texto:'Quien cubre con buenas acciones el mal que hizo ilumina este mundo como la luna libre de nubes.',
+  fuente:'Dhammapada, verso 173 (Buda)',fid:'adaptación',
+  reflexion:'Haber hecho daño no cierra la puerta para siempre. La tradición budista reconoce que cambiar es posible, y que se demuestra con actos.'},
+ {id:13,cats:['culpa','amargura'],tipo:'idea',trad:'Budismo',titulo:'Angulimala: nadie está perdido',
+  texto:'En la tradición budista se cuenta de Angulimala, un hombre temido por sus crímenes, que se encontró con Buda, cambió de vida y terminó viviendo con humildad y paz.',
+  fuente:'Majjhima Nikāya 86 (Angulimala Sutta)',fid:'adaptación',
+  reflexion:'La historia afirma que el pasado pesa, pero no define por completo a una persona. La puerta del cambio siempre se mantiene abierta.'},
+ {id:14,cats:['culpa'],tipo:'practica',trad:'Estoicismo y espiritualidad ignaciana',titulo:'Examen de la noche',
+  texto:'Al final del día, dedica cinco minutos a repasar: ¿Cuándo me sentí en paz? ¿Cuándo fui duro o injusto con alguien? ¿Qué quiero hacer distinto mañana?',
+  fuente:'Inspirado en el Examen de Ignacio de Loyola, Ejercicios Espirituales (s. XVI), y en la práctica estoica (Séneca, Sobre la ira, III, 36)',fid:'adaptación',
+  reflexion:'Es un repaso honesto y sin látigo: reconocer, agradecer, pedir perdón si hace falta y proponerse algo pequeño y concreto para mañana.',
+  practica:'Hazlo hoy antes de dormir, con una libreta. Termina siempre con una cosa por la que dar gracias.'},
+ {id:15,cats:['culpa'],tipo:'frase',trad:'Confucianismo',titulo:'La regla de reciprocidad',
+  texto:'Lo que no deseas para ti, no lo hagas a los demás.',
+  fuente:'Confucio, Analectas, XV, 24',fid:'adaptación',
+  reflexion:'Una guía de conducta que aparece, con palabras distintas, en casi todas las tradiciones espirituales.'},
+ {id:35,cats:['culpa','amargura'],tipo:'frase',trad:'Islam',titulo:'Desear para el otro lo que deseas para ti',
+  texto:'Ninguno de vosotros cree de verdad hasta que desea para su hermano lo que desea para sí mismo.',
+  fuente:'Hadiz recogido por al-Bujari y Muslim (Cuarenta Hadices de an-Nawawi, nº 13)',fid:'adaptación',
+  reflexion:'Otra versión de la regla de oro: ver al otro como a uno mismo es la base de tratar bien a las personas.'},
+ {id:36,cats:['culpa','tristeza'],tipo:'frase',trad:'Psicología humanista',titulo:'La paradoja de aceptarse',
+  texto:'La curiosa paradoja es que cuando me acepto tal como soy, entonces puedo cambiar.',
+  fuente:'Carl Rogers, El proceso de convertirse en persona (On Becoming a Person, 1961)',fid:'adaptación',
+  reflexion:'Cambiar por desprecio a uno mismo suele durar poco. Cambiar desde la aceptación abre más posibilidades.'},
+ {id:25,cats:['tristeza','culpa','vacio'],tipo:'practica',trad:'Psicología',titulo:'Hablarte como a un buen amigo',
+  texto:'Cuando te equivoques o sufras, di: "Esto es difícil. Todos pasamos por momentos así. ¿Qué necesito ahora?"',
+  fuente:'Kristin Neff, "Self-Compassion", Self and Identity, 2003',fid:'adaptación',
+  reflexion:'La autocompasión no es indulgencia: la investigación asocia tratarse con amabilidad a mayor motivación para mejorar.',
+  practica:'Pon la mano sobre el corazón y repite esas tres frases despacio.'},
+
+ {id:3,cats:['ansiedad','tristeza'],tipo:'idea',trad:'Estoicismo',titulo:'No es la cosa, es lo que pensamos de ella',
+  texto:'Lo que perturba a las personas no son las cosas, sino las opiniones que se forman sobre ellas.',
+  fuente:'Epicteto, Enquiridión, 5',fid:'adaptación',
+  reflexion:'Epicteto, antiguo maestro estoico, nos invita a separar los hechos de la historia que nos contamos. Muchas veces el sufrimiento mayor está en la interpretación.',
+  practica:'Escribe dos columnas: "Lo que pasó" (solo hechos) y "Lo que me estoy diciendo". Mira cuánto de la segunda es opinión.'},
+ {id:4,cats:['ansiedad'],tipo:'frase',trad:'Estoicismo',titulo:'Sufrimos más en la imaginación',
+  texto:'Sufrimos más a menudo en la imaginación que en la realidad.',
+  fuente:'Séneca, Cartas a Lucilio, Carta 13',fid:'adaptación',
+  reflexion:'Gran parte de la ansiedad es un ensayo mental de desgracias que quizá nunca lleguen.',
+  practica:'Pregúntate: ¿qué está pasando realmente en este momento? Nombra tres cosas que ves, dos que oyes y una que sientes en el cuerpo.'},
+ {id:5,cats:['ansiedad'],tipo:'frase',trad:'Tradición cristiana',titulo:'Un día a la vez',
+  texto:'Así que no os afanéis por el día de mañana, pues el día de mañana traerá su afán. Basta a cada día su propio mal.',
+  fuente:'Mateo 6:34, Reina-Valera (1909)',fid:'textual',
+  reflexion:'Una invitación antigua a bajar el ritmo del pensamiento y ocuparse de lo que sí se puede hacer hoy.'},
+ {id:37,cats:['ansiedad'],tipo:'frase',trad:'Islam',titulo:'El sosiego del corazón',
+  texto:'En el recuerdo de Dios los corazones encuentran sosiego.',
+  fuente:'Corán, sura 13 (Ar-Ra’d), versículo 28',fid:'adaptación',
+  reflexion:'Para muchas personas, una pausa de oración o recogimiento calma el cuerpo y el pensamiento. Cada quien puede encontrar su propia forma de hacerlo.'},
+ {id:24,cats:['ansiedad','tristeza','ira'],tipo:'practica',trad:'Práctica contemplativa',titulo:'Respiración de calma',
+  texto:'Inhala contando hasta 4, sostén un instante, exhala lentamente contando hasta 6 u 8. Repite durante dos o tres minutos.',
+  fuente:'Respiración diafragmática lenta, presente en prácticas contemplativas (p. ej. pranayama) y en terapias de relajación',fid:'adaptación',
+  reflexion:'Alargar la exhalación ayuda al cuerpo a pasar de alerta a calma.',
+  practica:'Pon una mano en el abdomen y siente cómo sube y baja. Si te mareas, vuelve a un ritmo normal.'},
+ {id:38,cats:['ansiedad','tristeza'],tipo:'practica',trad:'Mindfulness',titulo:'Espacio de respiración de tres minutos',
+  texto:'1) Pregúntate qué estás sintiendo y pensando, sin cambiar nada. 2) Lleva toda tu atención a la respiración. 3) Abre la atención al cuerpo entero.',
+  fuente:'Segal, Williams y Teasdale, Mindfulness-Based Cognitive Therapy for Depression (2002)',fid:'adaptación',
+  reflexion:'Es un minirretiro para el día a día: se puede hacer en el trabajo, en el bus o antes de una conversación difícil.',
+  practica:'Pon un recordatorio en tu teléfono a media mañana y a media tarde para hacer esta pausa.'},
+ {id:23,cats:['gratitud','ira','ansiedad'],tipo:'idea',trad:'Estoicismo',titulo:'Querer lo que sucede',
+  texto:'No pidas que las cosas sucedan como tú quieres; desea que sucedan como suceden y tu vida será serena.',
+  fuente:'Epicteto, Enquiridión, 8',fid:'adaptación',
+  reflexion:'Una invitación a distinguir lo que depende de nosotros de lo que no. La paz empieza por esa distinción.',
+  practica:'Haz dos listas sobre lo que te inquieta: "Depende de mí" y "No depende de mí". Actúa solo sobre la primera.'},
+
+ {id:20,cats:['soledad'],tipo:'frase',trad:'Tradición judía y cristiana',titulo:'Mejores son dos',
+  texto:'Mejores son dos que uno; porque tienen mejor paga de su trabajo. Porque si cayeren, el uno levantará a su compañero.',
+  fuente:'Eclesiastés 4:9-10, Reina-Valera (1909)',fid:'textual',
+  reflexion:'Los humanos necesitamos vínculos. Pedir y ofrecer compañía es un acto de valentía, no de debilidad.',
+  practica:'Escribe hoy un mensaje corto a una persona: "Pensé en ti, ¿cómo estás?". No necesita más.'},
+ {id:39,cats:['soledad','culpa'],tipo:'frase',trad:'Tradición africana (nguni)',titulo:'Ubuntu: somos con los demás',
+  texto:'Una persona es persona a través de otras personas.',
+  fuente:'Proverbio nguni (zulú: "Umuntu ngumuntu ngabantu"), filosofía Ubuntu',fid:'adaptación',
+  reflexion:'En la visión Ubuntu nadie se hace persona solo. Nuestra humanidad se construye y se cuida en comunidad.'},
+
+ {id:22,cats:['gratitud','tristeza','amargura'],tipo:'practica',trad:'Psicología positiva',titulo:'Tres cosas buenas',
+  texto:'Cada noche escribe tres cosas, por pequeñas que sean, por las que estás agradecido hoy.',
+  fuente:'Emmons y McCullough, "Counting Blessings Versus Burdens", Journal of Personality and Social Psychology, 2003',fid:'adaptación',
+  reflexion:'En ese estudio, las personas que escribían gratitudes con regularidad reportaron mejor ánimo y más optimismo que quienes anotaban molestias.',
+  practica:'Empieza hoy mismo. Añade un "porque…": ¿por qué esa cosa fue buena?'},
+ {id:40,cats:['gratitud','culpa'],tipo:'frase',trad:'Filosofía romana',titulo:'La madre de las virtudes',
+  texto:'La gratitud no es solo la mayor de las virtudes, sino la madre de todas las demás.',
+  fuente:'Cicerón, En defensa de Plancio (Pro Plancio), 80',fid:'adaptación',
+  reflexion:'Cicerón la pone en el origen de la vida buena: quien reconoce lo recibido tiende a dar.'}
+];
+
+DATA_FALLBACK.forEach((d,i)=>{ d.id=i+1; });
+
+/* ---------- Conexión con Supabase (lectura pública) ---------- */
+const SB_URL = 'https://vgkyoyosjewdygxtnqvu.supabase.co';
+const SB_KEY = 'sb_publishable_QOZiGlFdzOcCQtqDqI_I_A_ian2l-pf'; // clave pública: solo permite leer lecturas publicadas
+const KNOWN_MOODS = ['tristeza','vacio','amargura','ira','culpa','ansiedad','soledad','gratitud'];
+let DATA = (function(){
+  try{
+    const c = JSON.parse(localStorage.getItem('luz-cache')||'null');
+    if(Array.isArray(c) && c.length) return c;
+  }catch(e){}
+  return DATA_FALLBACK;
+})();
+
+/* ---------- Utilidades ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const norm = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function load(k,def){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):def; }catch(e){ return def; } }
+function save(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+let favs = new Set(load('luz-favs',[]));
+let diario = load('luz-diario',[]);
+const FEELS = ['Triste','Sin ganas','Con rabia','Ansioso/a','Solo/a','En paz','Agradecido/a'];
+
+/* ---------- Páginas del libro ---------- */
+let pages = [], cur = 0, busy = false, delArm = null;
+function buildPages(){
+  pages = [{t:'cover'},{t:'toc'}];
+  MOODS.forEach(m=>{
+    pages.push({t:'sec',mood:m.id});
+    DATA.filter(d=>d.cats[0]===m.id).forEach(d=>pages.push({t:'lec',id:d.id}));
+  });
+  pages.push({t:'diario'},{t:'favs'},{t:'end'});
+}
+const idxSec = m => pages.findIndex(p=>p.t==='sec'&&p.mood===m);
+const idxLec = id => pages.findIndex(p=>p.t==='lec'&&p.id===id);
+const idxT = t => pages.findIndex(p=>p.t===t);
+const typeLabel = t => ({frase:'Frase',idea:'Idea',practica:'Práctica'})[t];
+
+function dailyPick(){
+  const pool = DATA.filter(d=>d.tipo!=='practica');
+  const d = new Date(); const day = Math.floor(new Date(d.getFullYear(),d.getMonth(),d.getDate())/864e5);
+  return pool[day % pool.length];
+}
+
+function renderPage(i){
+  const p = pages[i];
+  if(p.t==='cover') return `
+    <div class="frame">
+      <div class="orn">✦</div>
+      <h1>Luz Interior</h1>
+      <p>Un librito para el alma</p>
+      <p style="font-size:.85rem">Sabiduría de muchas tradiciones, con sus fuentes</p>
+      <div class="open">Toca o desliza para abrir →</div>
+    </div>`;
+  if(p.t==='toc'){
+    const dp = dailyPick();
+    return `
+     <h2 class="t">Índice</h2>
+     <input id="sq" class="search" type="search" placeholder="Busca un tema, autor o tradición…" aria-label="Buscar">
+     <div id="sres"></div>
+     <div id="chapters">
+       <div class="daily"><span class="tag">Para hoy</span><blockquote>“${esc(dp.texto)}”</blockquote><div class="muted">${esc(dp.fuente)}</div>
+         <div class="actions"><button class="btn" data-goto="${idxLec(dp.id)}">Leer completa</button></div></div>
+       <ul class="list">
+         ${MOODS.map(m=>`<li><button data-goto="${idxSec(m.id)}"><span>${esc(m.label)}</span><small>pág. ${idxSec(m.id)+1}</small></button></li>`).join('')}
+         <li><button data-goto="${idxT('diario')}"><span>Mi diario</span><small>pág. ${idxT('diario')+1}</small></button></li>
+         <li><button data-goto="${idxT('favs')}"><span>♥ Mis favoritos</span><small>pág. ${idxT('favs')+1}</small></button></li>
+       </ul>
+       <p class="muted">Aquí caben todas las tradiciones y también la ciencia: ninguna está por encima de las otras. Tú eliges lo que te sirve.</p>
+     </div>`;
+  }
+  if(p.t==='sec'){
+    const m = MOODS.find(x=>x.id===p.mood);
+    const n = DATA.filter(d=>d.cats[0]===m.id).length;
+    return `<div class="sec"><div class="orn">✦</div><div class="tag">Capítulo ${MOODS.indexOf(m)+1}</div><div class="big">${esc(m.label)}</div><p>${esc(m.intro)}</p><p class="muted">${n} lecturas · desliza para continuar →</p></div>`;
+  }
+  if(p.t==='lec'){
+    const d = DATA.find(x=>x.id===p.id);
+    const others = d.cats.filter(c=>c!==d.cats[0]);
+    return `
+     <div class="tag">${typeLabel(d.tipo)} · ${esc(d.trad)}</div>
+     <h3 class="t">${esc(d.titulo)}</h3>
+     <div class="quote ${d.tipo==='frase'?'q':''}">${esc(d.texto)}</div>
+     <div class="source">${esc(d.fuente)}<span class="badge">${d.fid}</span></div>
+     <p class="refl">${esc(d.reflexion)}</p>
+     ${d.practica?`<div class="practice"><strong>Para practicar:</strong> ${esc(d.practica)}</div>`:''}
+     ${others.length?`<div class="also">También para:${others.map(c=>`<button class="mini" data-goto="${idxSec(c)}">${esc(MOOD_LABEL[c])}</button>`).join('')}</div>`:''}
+     <div class="actions">
+       <button class="btn ${favs.has(d.id)?'on':''}" data-fav="${d.id}">${favs.has(d.id)?'♥ Guardado':'♡ Guardar'}</button>
+       <button class="btn" data-copy="${d.id}">Copiar</button>
+     </div>`;
+  }
+  if(p.t==='diario'){
+    return `
+     <h2 class="t">Mi diario</h2>
+     <p class="muted">Escribe cómo te sientes o qué te dejó una lectura. Se guarda <strong>solo en este dispositivo</strong>; nadie más lo ve.</p>
+     <select id="dFeel" aria-label="Cómo me siento">${FEELS.map(f=>`<option>${f}</option>`).join('')}</select>
+     <textarea id="dText" placeholder="Hoy me siento…" style="margin-top:8px"></textarea>
+     <div class="actions"><button class="btn primary" data-dsave="1">Guardar entrada</button></div>
+     ${diario.length? diario.slice().reverse().map(e=>`
+        <div class="entry"><small>${esc(e.fecha)} · ${esc(e.feel)}</small><div>${esc(e.texto).replace(/\n/g,'<br>')}</div>
+        <button class="mini" data-del="${e.id}">${delArm===e.id?'Toca otra vez para borrar':'Borrar'}</button></div>`).join('')
+       : '<div class="empty">Aún no hay entradas.</div>'}`;
+  }
+  if(p.t==='favs'){
+    const fl = DATA.filter(d=>favs.has(d.id));
+    return `<h2 class="t">♥ Mis favoritos</h2>` + (fl.length
+      ? `<ul class="list">${fl.map(d=>`<li><button data-goto="${idxLec(d.id)}"><span>${esc(d.titulo)}</span><small>${typeLabel(d.tipo)}</small></button></li>`).join('')}</ul>`
+      : '<div class="empty">Cuando guardes una lectura con ♡, aparecerá aquí.</div>');
+  }
+  if(p.t==='end') return `
+     <div class="sec"><div class="orn">✦</div><div class="big">Hasta pronto</div>
+     <p>Gracias por detenerte un momento contigo.</p>
+     <div class="note"><strong>Una nota con cariño:</strong> este librito acompaña, pero no reemplaza la ayuda profesional. Si la tristeza o el vacío se sienten muy pesados, o piensas en hacerte daño, habla hoy con alguien de confianza o con un profesional de salud. En una emergencia, llama al número de emergencias de tu país (en Costa Rica, el 911).</div>
+     <p class="muted">Las lecturas marcadas como <em>adaptación</em> son paráfrasis del sentido original, no citas textuales. Conviene contrastarlas con una edición concreta.</p>
+     <button class="btn" data-goto="1">Volver al índice</button></div>`;
+  return '';
+}
+
+/* ---------- Animación de volteo ---------- */
+const topPg = $('#pgTop'), underPg = $('#pgUnder');
+function setContent(el,i){
+  el.innerHTML = '<div class="inner'+(pages[i].t==='cover'?' cover':'')+'">'+renderPage(i)+'</div>';
+  el.scrollTop = 0;
+  const sq = el.querySelector('#sq'); if(sq) sq.addEventListener('input', onSearch);
+}
+function updateBar(){
+  $('#prev').disabled = cur===0;
+  $('#next').disabled = cur===pages.length-1;
+  $('#ind').textContent = cur===0 ? '' : (cur+1)+' / '+pages.length;
+  $('#goToc').style.visibility = cur===0 ? 'hidden' : 'visible';
+}
+function go(n){
+  if(busy||n<0||n>=pages.length||n===cur) return;
+  busy = true;
+  const dir = n>cur?1:-1, dur = reduce?0:520, ease='cubic-bezier(.55,0,.35,1)';
+  const shadowOn='6px 0 24px rgba(0,0,0,.35)';
+  let a;
+  if(dir>0){
+    setContent(underPg,n);
+    a = topPg.animate([{transform:'rotateY(0deg)',boxShadow:'0 0 0 rgba(0,0,0,0)'},{transform:'rotateY(-110deg)',boxShadow:shadowOn}],{duration:dur,easing:ease,fill:'both'});
+    a.onfinish = ()=>{ setContent(topPg,n); a.cancel(); cur=n; busy=false; updateBar(); };
+  } else {
+    setContent(underPg,cur);
+    setContent(topPg,n);
+    a = topPg.animate([{transform:'rotateY(-110deg)',boxShadow:shadowOn},{transform:'rotateY(0deg)',boxShadow:'0 0 0 rgba(0,0,0,0)'}],{duration:dur,easing:ease,fill:'both'});
+    a.onfinish = ()=>{ a.cancel(); cur=n; busy=false; updateBar(); };
+  }
+}
+function refresh(){ const s=topPg.scrollTop; setContent(topPg,cur); topPg.scrollTop=s; }
+
+/* ---------- Búsqueda en el índice ---------- */
+function onSearch(e){
+  const q = norm(e.target.value.trim());
+  const res = e.target.closest('.inner').querySelector('#sres');
+  const chap = e.target.closest('.inner').querySelector('#chapters');
+  if(!q){ res.innerHTML=''; chap.style.display=''; return; }
+  chap.style.display='none';
+  const items = DATA.filter(d=> q.split(/\s+/).every(w=> norm([d.titulo,d.texto,d.reflexion,d.fuente,d.trad,d.practica||'',d.cats.map(c=>MOOD_LABEL[c]).join(' ')].join(' ')).includes(w)));
+  res.innerHTML = items.length
+    ? `<ul class="list">${items.map(d=>`<li><button data-goto="${idxLec(d.id)}"><span>${esc(d.titulo)}<br><small>${esc(d.trad)}</small></span><small>${typeLabel(d.tipo)}</small></button></li>`).join('')}</ul>`
+    : '<div class="empty">No encontré nada con eso. Prueba otra palabra.</div>';
+}
+
+/* ---------- Eventos ---------- */
+document.addEventListener('click', e=>{
+  const g = e.target.closest('[data-goto]'); if(g){ go(+g.dataset.goto); return; }
+  const f = e.target.closest('[data-fav]');
+  if(f){ const id=+f.dataset.fav; favs.has(id)?favs.delete(id):favs.add(id); save('luz-favs',[...favs]); refresh(); return; }
+  const c = e.target.closest('[data-copy]');
+  if(c){
+    const d = DATA.find(x=>x.id===+c.dataset.copy);
+    const txt = `"${d.texto}"\n— ${d.fuente}`;
+    try{ navigator.clipboard.writeText(txt).then(()=>{c.textContent='¡Copiado!';setTimeout(()=>c.textContent='Copiar',1400)}).catch(()=>{}); }catch(err){}
+    return;
+  }
+  if(e.target.closest('[data-dsave]')){
+    const t = $('#dText').value.trim(); if(!t) return;
+    const feel = $('#dFeel').value;
+    const now = new Date();
+    diario.push({id:Date.now(),fecha:now.toLocaleDateString('es',{day:'numeric',month:'short',year:'numeric'}),feel,texto:t});
+    save('luz-diario',diario); refresh(); return;
+  }
+  const del = e.target.closest('[data-del]');
+  if(del){ const id=+del.dataset.del;
+    if(delArm===id){ diario = diario.filter(x=>x.id!==id); save('luz-diario',diario); delArm=null; } else { delArm=id; }
+    refresh(); return; }
+  if(cur===0 && e.target.closest('.cover')) go(1);
+});
+$('#prev').onclick = ()=>go(cur-1);
+$('#next').onclick = ()=>go(cur+1);
+$('#goToc').onclick = ()=>go(1);
+document.addEventListener('keydown', e=>{
+  if(/INPUT|TEXTAREA|SELECT/.test((e.target.tagName||''))) return;
+  if(e.key==='ArrowRight') go(cur+1);
+  if(e.key==='ArrowLeft') go(cur-1);
+});
+let sx=0, sy=0, tracking=false;
+const stage = document.querySelector('.stage');
+stage.addEventListener('touchstart', e=>{ const t=e.touches[0]; sx=t.clientX; sy=t.clientY; tracking=!/INPUT|TEXTAREA|SELECT/.test(e.target.tagName); }, {passive:true});
+stage.addEventListener('touchend', e=>{
+  if(!tracking) return; const t=e.changedTouches[0]; const dx=t.clientX-sx, dy=t.clientY-sy;
+  if(Math.abs(dx)>50 && Math.abs(dx)>Math.abs(dy)*1.5){ go(dx<0?cur+1:cur-1); }
+}, {passive:true});
+let mx=0, mdown=false;
+stage.addEventListener('mousedown', e=>{ mx=e.clientX; mdown=!/INPUT|TEXTAREA|SELECT/.test(e.target.tagName); });
+stage.addEventListener('mouseup', e=>{ if(!mdown) return; mdown=false; const dx=e.clientX-mx; if(Math.abs(dx)>80){ go(dx<0?cur+1:cur-1); } });
+
+async function loadRemote(){
+  try{
+    const ctl = new AbortController(); const to = setTimeout(()=>ctl.abort(), 7000);
+    const r = await fetch(SB_URL+'/rest/v1/luz_lecturas?select=id,cats,tipo,trad,titulo,texto,fuente,fid,reflexion,practica&publicada=eq.true&order=orden.asc,id.asc',
+      {headers:{apikey:SB_KEY}, signal:ctl.signal});
+    clearTimeout(to);
+    if(!r.ok) return;
+    let rows = await r.json();
+    if(!Array.isArray(rows)) return;
+    rows = rows.filter(d=>Array.isArray(d.cats) && KNOWN_MOODS.includes(d.cats[0]));
+    if(!rows.length) return;
+    if(JSON.stringify(rows)===JSON.stringify(DATA)) return;
+    save('luz-cache', rows);
+    // Si el lector aún está en la portada o el índice, actualizamos ya; si no, queda para la próxima vez.
+    if(cur<=1 && !busy){
+      DATA = rows; buildPages();
+      setContent(topPg,cur); setContent(underPg, cur===0?1:0);
+      updateBar();
+    }
+  }catch(e){ /* sin conexión: se usa la copia local */ }
+}
+
+buildPages();
+setContent(topPg,0);
+setContent(underPg,1);
+updateBar();
+loadRemote();
+
+if('serviceWorker' in navigator && location.protocol.startsWith('http')){
+  try{ navigator.serviceWorker.register('sw.js').catch(()=>{}); }catch(e){}
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Luz Interior – Administración</title>
+<style>
+:root{--bg:#faf6ef;--card:#fff;--ink:#2e2a25;--muted:#75695a;--line:#e3d6bd;--accent:#a8541a;--soft:#f6e3c8;--bad:#b3261e;--ok:#3f7a52}
+@media (prefers-color-scheme:dark){:root{--bg:#1d1b18;--card:#262320;--ink:#f0e8da;--muted:#b0a591;--line:#463e33;--accent:#e2a362;--soft:#3d3123;--bad:#f2b8b5;--ok:#8fbf9b}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,'Segoe UI',sans-serif;line-height:1.5}
+.wrap{max-width:760px;margin:0 auto;padding:18px 14px 80px}
+h1{font-family:Georgia,serif;font-size:1.5rem;margin:6px 0}
+h2{font-size:1.1rem;margin:0 0 10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin:12px 0}
+label{display:block;font-size:.85rem;font-weight:600;margin:10px 0 4px}
+input,select,textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit}
+textarea{min-height:90px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--accent)}
+.btn{border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:10px;padding:9px 14px;font:inherit;cursor:pointer}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700}
+.btn.danger{color:var(--bad);border-color:var(--bad)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.row > *{flex:1}
+.row .btn{flex:0 0 auto}
+.checks{display:flex;flex-wrap:wrap;gap:6px 14px}
+.checks label{display:flex;align-items:center;gap:6px;margin:0;font-weight:400}
+.checks input{width:auto}
+.msg{padding:10px 12px;border-radius:10px;margin:10px 0;font-size:.92rem}
+.msg.err{background:rgba(179,38,30,.12);color:var(--bad)}
+.msg.ok{background:rgba(63,122,82,.14);color:var(--ok)}
+.item{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;border-top:1px solid var(--line);padding:10px 0}
+.item:first-child{border-top:0}
+.item small{color:var(--muted)}
+.pill{display:inline-block;font-size:.72rem;border:1px solid var(--line);border-radius:999px;padding:0 8px;margin-left:6px;color:var(--muted)}
+.hide{display:none}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.hint{color:var(--muted);font-size:.85rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><h1>Luz Interior · Administración</h1><button class="btn hide" id="logout">Salir</button></div>
+  <div id="msg"></div>
+
+  <section id="loginBox" class="card">
+    <h2>Entrar</h2>
+    <p class="hint">Solo para quien administra el contenido del librito.</p>
+    <label for="email">Correo</label>
+    <input id="email" type="email" autocomplete="username">
+    <label for="pass">Contraseña</label>
+    <input id="pass" type="password" autocomplete="current-password">
+    <p><button class="btn primary" id="login">Entrar</button></p>
+  </section>
+
+  <section id="app" class="hide">
+    <div class="card">
+      <div class="row">
+        <h2 style="flex:1;margin:0" id="formTitle">Nueva lectura</h2>
+        <button class="btn" id="newBtn">+ Nueva</button>
+      </div>
+      <input type="hidden" id="fId">
+      <label for="fTitulo">Título</label><input id="fTitulo">
+      <div class="row">
+        <div><label for="fTipo">Tipo</label>
+          <select id="fTipo"><option value="frase">Frase</option><option value="idea">Idea</option><option value="practica">Práctica</option></select></div>
+        <div><label for="fTrad">Tradición o campo</label>
+          <input id="fTrad" list="trads" placeholder="Ej.: Budismo, Islam, Psicología…"></div>
+      </div>
+      <datalist id="trads"></datalist>
+      <label for="fMain">Capítulo principal</label>
+      <select id="fMain"></select>
+      <label>También ayuda con</label>
+      <div class="checks" id="fOthers"></div>
+      <label for="fTexto">Texto (la cita, la idea o la práctica)</label><textarea id="fTexto"></textarea>
+      <div class="row">
+        <div style="flex:3"><label for="fFuente">Fuente (obra, capítulo/verso, autor, año)</label><input id="fFuente"></div>
+        <div><label for="fFid">¿Es textual?</label>
+          <select id="fFid"><option value="adaptación">Adaptación (paráfrasis)</option><option value="textual">Textual</option></select></div>
+      </div>
+      <p class="hint">Marca "Textual" solo si copiaste de una traducción de dominio público. Ante la duda, usa "Adaptación".</p>
+      <label for="fRefl">Reflexión</label><textarea id="fRefl"></textarea>
+      <label for="fPrac">Para practicar (opcional)</label><textarea id="fPrac" style="min-height:60px"></textarea>
+      <div class="row">
+        <div><label for="fOrden">Orden</label><input id="fOrden" type="number" step="10"></div>
+        <div class="checks" style="align-self:end"><label><input type="checkbox" id="fPub" checked> Publicada</label></div>
+      </div>
+      <p><button class="btn primary" id="save">Guardar</button> <button class="btn" id="cancel">Limpiar</button></p>
+    </div>
+
+    <div class="card">
+      <div class="row"><h2 style="flex:1;margin:0">Lecturas <span id="count" class="pill"></span></h2>
+        <input id="filter" type="search" placeholder="Filtrar…" style="flex:1"></div>
+      <div id="list"></div>
+    </div>
+  </section>
+</div>
+
+<script>
+const SB_URL = 'https://vgkyoyosjewdygxtnqvu.supabase.co';
+const SB_KEY = 'sb_publishable_QOZiGlFdzOcCQtqDqI_I_A_ian2l-pf';
+const MOODS = [
+  ['tristeza','Cuando estoy triste'],['vacio','Cuando no tengo ganas'],['amargura','Cuando me siento amargado/a'],
+  ['ira','Cuando tengo rabia'],['culpa','Quiero ser mejor persona'],['ansiedad','Cuando estoy ansioso/a'],
+  ['soledad','Cuando me siento solo/a'],['gratitud','Para agradecer']
+];
+const MOOD_LABEL = Object.fromEntries(MOODS);
+const $ = s => document.querySelector(s);
+const esc = s => String(s??'').replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const norm = s => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+
+let session = null, rows = [], delArm = null;
+
+function msg(text, kind){ $('#msg').innerHTML = text ? `<div class="msg ${kind||'err'}">${esc(text)}</div>` : ''; if(text && kind==='ok') setTimeout(()=>{ if($('#msg').textContent.includes(text)) $('#msg').innerHTML=''; },3500); }
+
+/* ---------- Sesión ---------- */
+function saveSession(s){ session = s; try{ s ? localStorage.setItem('luz-admin-session',JSON.stringify(s)) : localStorage.removeItem('luz-admin-session'); }catch(e){} }
+function loadSession(){ try{ return JSON.parse(localStorage.getItem('luz-admin-session')||'null'); }catch(e){ return null; } }
+
+async function authCall(path, body){
+  const r = await fetch(SB_URL+'/auth/v1/'+path, {method:'POST',headers:{apikey:SB_KEY,'Content-Type':'application/json'},body:JSON.stringify(body)});
+  const j = await r.json().catch(()=>({}));
+  if(!r.ok) throw new Error(j.error_description || j.msg || 'No se pudo iniciar sesión');
+  return {access_token:j.access_token, refresh_token:j.refresh_token, expires_at:Date.now()+ (j.expires_in||3600)*1000 - 30000, email:j.user && j.user.email};
+}
+async function ensureFresh(){
+  if(session && Date.now() > session.expires_at){
+    try{ saveSession(await authCall('token?grant_type=refresh_token',{refresh_token:session.refresh_token})); }
+    catch(e){ saveSession(null); showLogin(); throw new Error('La sesión expiró. Entra de nuevo.'); }
+  }
+}
+async function api(path, opts={}){
+  await ensureFresh();
+  const h = Object.assign({apikey:SB_KEY,Authorization:'Bearer '+session.access_token,'Content-Type':'application/json'}, opts.headers||{});
+  const r = await fetch(SB_URL+'/rest/v1/'+path, Object.assign({}, opts, {headers:h}));
+  const text = await r.text();
+  let j = null; try{ j = text?JSON.parse(text):null; }catch(e){}
+  if(!r.ok) throw new Error((j && (j.message||j.hint)) || 'Error '+r.status);
+  return j;
+}
+
+/* ---------- Pantallas ---------- */
+function showLogin(){ $('#loginBox').classList.remove('hide'); $('#app').classList.add('hide'); $('#logout').classList.add('hide'); }
+async function showApp(){
+  // ¿Esta cuenta es administradora? La política solo deja ver la fila propia si lo es.
+  let adm;
+  try{ adm = await api('luz_admins?select=email'); }
+  catch(e){ msg(e.message); showLogin(); return; }
+  if(!adm || !adm.length){ msg('Esta cuenta no tiene permiso de administración.'); saveSession(null); showLogin(); return; }
+  $('#loginBox').classList.add('hide'); $('#app').classList.remove('hide'); $('#logout').classList.remove('hide');
+  buildForm(); await refresh();
+}
+
+function buildForm(){
+  $('#fMain').innerHTML = MOODS.map(([id,l])=>`<option value="${id}">${esc(l)}</option>`).join('');
+  $('#fOthers').innerHTML = MOODS.map(([id,l])=>`<label><input type="checkbox" value="${id}"> ${esc(l)}</label>`).join('');
+}
+async function refresh(){
+  try{
+    rows = await api('luz_lecturas?select=*&order=orden.asc,id.asc');
+    const trads = [...new Set(rows.map(r=>r.trad))].sort();
+    $('#trads').innerHTML = trads.map(t=>`<option value="${esc(t)}">`).join('');
+    renderList();
+  }catch(e){ msg(e.message); }
+}
+function renderList(){
+  const q = norm($('#filter').value.trim());
+  const items = rows.filter(r=>!q || norm([r.titulo,r.trad,r.fuente,r.texto].join(' ')).includes(q));
+  $('#count').textContent = items.length+' de '+rows.length;
+  $('#list').innerHTML = items.map(r=>`
+    <div class="item">
+      <div><strong>${esc(r.titulo)}</strong>${r.publicada?'':'<span class="pill">borrador</span>'}<br>
+        <small>${esc(r.trad)} · ${esc(MOOD_LABEL[r.cats[0]]||r.cats[0])} · ${esc(r.tipo)}</small></div>
+      <div class="row" style="flex:0 0 auto">
+        <button class="btn" data-edit="${r.id}">Editar</button>
+        <button class="btn danger" data-del="${r.id}">${delArm===r.id?'¿Seguro?':'Borrar'}</button>
+      </div>
+    </div>`).join('') || '<p class="hint">Sin resultados.</p>';
+}
+
+function fillForm(r){
+  $('#formTitle').textContent = r ? 'Editar lectura' : 'Nueva lectura';
+  $('#fId').value = r ? r.id : '';
+  $('#fTitulo').value = r?r.titulo:'';
+  $('#fTipo').value = r?r.tipo:'frase';
+  $('#fTrad').value = r?r.trad:'';
+  $('#fMain').value = r?r.cats[0]:'tristeza';
+  document.querySelectorAll('#fOthers input').forEach(c=>{ c.checked = !!(r && r.cats.slice(1).includes(c.value)); });
+  $('#fTexto').value = r?r.texto:'';
+  $('#fFuente').value = r?r.fuente:'';
+  $('#fFid').value = r?r.fid:'adaptación';
+  $('#fRefl').value = r?r.reflexion:'';
+  $('#fPrac').value = r&&r.practica?r.practica:'';
+  const maxOrden = rows.reduce((m,x)=>Math.max(m,x.orden),0);
+  $('#fOrden').value = r?r.orden:maxOrden+10;
+  $('#fPub').checked = r?r.publicada:true;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+async function save(){
+  const main = $('#fMain').value;
+  const others = [...document.querySelectorAll('#fOthers input:checked')].map(c=>c.value).filter(v=>v!==main);
+  const body = {
+    titulo:$('#fTitulo').value.trim(), tipo:$('#fTipo').value, trad:$('#fTrad').value.trim(),
+    cats:[main,...others], texto:$('#fTexto').value.trim(), fuente:$('#fFuente').value.trim(),
+    fid:$('#fFid').value, reflexion:$('#fRefl').value.trim(), practica:$('#fPrac').value.trim()||null,
+    orden:parseInt($('#fOrden').value,10)||0, publicada:$('#fPub').checked
+  };
+  const faltan = ['titulo','trad','texto','fuente','reflexion'].filter(k=>!body[k]);
+  if(faltan.length){ msg('Faltan campos obligatorios: '+faltan.join(', ')+'. Recuerda que toda lectura necesita su fuente.'); return; }
+  try{
+    const id = $('#fId').value;
+    if(id) await api('luz_lecturas?id=eq.'+encodeURIComponent(id), {method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify(body)});
+    else await api('luz_lecturas', {method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(body)});
+    msg('Guardado. El libro lo mostrará la próxima vez que se abra con conexión.','ok');
+    fillForm(null); await refresh();
+  }catch(e){ msg(e.message); }
+}
+
+/* ---------- Eventos ---------- */
+$('#login').onclick = async ()=>{
+  msg('');
+  try{
+    const s = await authCall('token?grant_type=password',{email:$('#email').value.trim(),password:$('#pass').value});
+    saveSession(s); $('#pass').value=''; await showApp();
+  }catch(e){ msg(e.message==='Failed to fetch' ? 'No pude conectar con el servidor.' : e.message); }
+};
+$('#pass').addEventListener('keydown',e=>{ if(e.key==='Enter') $('#login').click(); });
+$('#logout').onclick = ()=>{ saveSession(null); rows=[]; showLogin(); };
+$('#newBtn').onclick = ()=>fillForm(null);
+$('#cancel').onclick = ()=>fillForm(null);
+$('#save').onclick = save;
+$('#filter').addEventListener('input', renderList);
+document.addEventListener('click', async e=>{
+  const ed = e.target.closest('[data-edit]');
+  if(ed){ fillForm(rows.find(r=>r.id===+ed.dataset.edit)); return; }
+  const del = e.target.closest('[data-del]');
+  if(del){
+    const id = +del.dataset.del;
+    if(delArm!==id){ delArm=id; renderList(); return; }
+    try{ await api('luz_lecturas?id=eq.'+id,{method:'DELETE',headers:{Prefer:'return=minimal'}}); delArm=null; msg('Lectura borrada.','ok'); await refresh(); }
+    catch(err){ msg(err.message); }
+  }
+});
+
+(async function init(){
+  const s = loadSession();
+  if(s){ session = s; await showApp(); } else showLogin();
+})();
+</script>
+</body>
+</html>
