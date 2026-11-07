@@ -479,6 +479,7 @@ function renderPage(i){
      ${others.length?`<div class="also">También para:${others.map(c=>`<button class="mini" data-goto="${idxSec(c)}">${esc(MOOD_LABEL[c])}</button>`).join('')}</div>`:''}
      <div class="actions">
        <button class="btn ${favs.has(d.id)?'on':''}" data-fav="${d.id}">${favs.has(d.id)?'♥ Guardado':'♡ Guardar'}</button>
+       ${TTS?`<button class="btn" data-say="${d.id}">🔊 Escuchar</button>`:''}
        <button class="btn" data-copy="${d.id}">Copiar</button>
      </div>`;
   }
@@ -522,7 +523,21 @@ function updateBar(){
   $('#ind').textContent = cur===0 ? '' : (cur+1)+' / '+pages.length;
   $('#goToc').style.visibility = cur===0 ? 'hidden' : 'visible';
 }
+const TTS = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
+let sayBtn=null;
+function stopSay(){ if(TTS){ try{speechSynthesis.cancel();}catch(e){} } if(sayBtn){ sayBtn.textContent='🔊 Escuchar'; sayBtn=null; } }
+function say(d,btn){
+  if(sayBtn===btn){ stopSay(); return; }
+  stopSay();
+  const partes=[d.titulo+'.', d.texto, d.fuente?('Fuente: '+d.fuente+'.'):'', d.reflexion||'', d.practica?('Para practicar: '+d.practica):''].filter(Boolean);
+  const u=new SpeechSynthesisUtterance(partes.join(' ... '));
+  u.lang='es-419'; u.rate=0.92;
+  const vs=speechSynthesis.getVoices(); const v=vs.find(x=>/^es[-_](419|MX|US|CR|CO)/i.test(x.lang))||vs.find(x=>/^es/i.test(x.lang)); if(v){ u.voice=v; u.lang=v.lang; }
+  u.onend=u.onerror=()=>{ if(sayBtn===btn){ btn.textContent='🔊 Escuchar'; sayBtn=null; } };
+  sayBtn=btn; btn.textContent='⏹ Detener'; speechSynthesis.speak(u);
+}
 function go(n){
+  stopSay();
   if(busy||n<0||n>=pages.length||n===cur) return;
   busy = true;
   const dir = n>cur?1:-1, dur = reduce?0:520, ease='cubic-bezier(.55,0,.35,1)';
@@ -559,6 +574,8 @@ document.addEventListener('click', e=>{
   const g = e.target.closest('[data-goto]'); if(g){ go(+g.dataset.goto); return; }
   const f = e.target.closest('[data-fav]');
   if(f){ const id=+f.dataset.fav; favs.has(id)?favs.delete(id):favs.add(id); save('luz-favs',[...favs]); refresh(); return; }
+  const sy = e.target.closest('[data-say]');
+  if(sy){ const d=DATA.find(x=>x.id===+sy.dataset.say); if(d) say(d,sy); return; }
   const c = e.target.closest('[data-copy]');
   if(c){
     const d = DATA.find(x=>x.id===+c.dataset.copy);
