@@ -1,0 +1,15 @@
+{
+  "name": "Luz Interior – Un librito para el alma",
+  "short_name": "Luz Interior",
+  "description": "Sabiduría de muchas tradiciones para acompañar los días difíciles, con sus fuentes.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f8f3ea",
+  "theme_color": "#f8f3ea",
+  "lang": "es",
+  "icons": [
+    {"src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"}
+  ]
+}
